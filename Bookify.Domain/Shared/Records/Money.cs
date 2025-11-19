@@ -1,4 +1,5 @@
-namespace Bookify.Domain.Apartments.Records;
+
+namespace Bookify.Domain.Shared.Records;
 
 public record Money(decimal Amount, Currency currency)
 {
@@ -13,4 +14,7 @@ public record Money(decimal Amount, Currency currency)
     }
 
     public static Money Zero() => new Money(0, Currency.None);
+    public static Money Zero(Currency currency) => new Money(0, currency);
+
+    public bool IsZero() => this == Zero();
 };
