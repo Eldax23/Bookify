@@ -8,11 +8,12 @@ using Bookify.Domain.Shared.Records;
 
 namespace Bookify.Domain.Bookings;
 
+// the process: Reserve -> Confirm -> Complete
+
 public sealed class Booking : Entity
 {
     public Booking(Guid id, Guid userId, Money priceForPeriod, Money cleaningFee, Money amentiesFee,
-        Money totalPrice, BookingStatus status, DateRange duration, DateTime createdOnUtc
-    ) : base(id)
+        Money totalPrice, BookingStatus status, DateRange duration, DateTime createdOnUtc ) : base(id)
     {
         UserId = userId;
         PriceForPeriod = priceForPeriod;
@@ -50,5 +51,67 @@ public sealed class Booking : Entity
         apartment.LastBookedOnUtc = utcNow;
         return booking;
         
+    }
+
+    public Result Confirm(DateTime utcNow)
+    {
+        // if the date is not reserved then that would be a problem (GIVEN THE HIERARCHY ABOVE)
+        if (Status != BookingStatus.Reserved)
+        {
+            return Result.Failure(BookingErrors.NotReserved);
+        }
+
+        Status = BookingStatus.Confirmed;
+        ConfirmedOnUtc = utcNow;
+        RaiseDomainEvent(new BookingConfirmedDomainEvent(Id));
+        return Result.Success();
+    }
+
+    public Result Reject(DateTime utcNow)
+    {
+        if (Status != BookingStatus.Reserved)
+        {
+            return Result.Failure(BookingErrors.NotPending);
+        }
+
+        Status = BookingStatus.Rejected;
+        RejectedOnUtc = utcNow;
+        RaiseDomainEvent(new BookingRejectedDomainEvent(Id));
+        return Result.Success();
+    }
+
+    public Result Complete(DateTime utcNow)
+    {
+        
+        // if the booking is not confirmed then it cannot be completed
+        if (Status != BookingStatus.Confirmed)
+        {
+            return Result.Failure(BookingErrors.NotConfirmed);
+        }
+
+        Status = BookingStatus.Completed;
+        CompletedOnUtc = utcNow;
+        RaiseDomainEvent(new BookingCompletedDomainEvent(Id));
+        return Result.Success();
+    }
+
+    public Result Cancel(DateTime utcNow)
+    {
+        if (Status != BookingStatus.Confirmed)
+        {
+            return Result.Failure(BookingErrors.NotConfirmed);
+        }
+        
+        DateOnly currDate = DateOnly.FromDateTime(utcNow);
+
+        // aka if the customer tried to cancel the reservation after the reservation started
+        if (Duration.Start > currDate)
+        {
+            return Result.Failure(BookingErrors.AlreadyStarted);
+        }
+
+        CancelledOnUtc = utcNow;
+        RaiseDomainEvent(new BookingCancelledDomainEvent(Id));
+        return Result.Success();
     }
 }
