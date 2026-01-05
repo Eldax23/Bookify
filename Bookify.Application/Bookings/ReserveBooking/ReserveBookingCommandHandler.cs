@@ -1,3 +1,4 @@
+using Bookify.Application.Abstractions.Clock;
 using Bookify.Application.Abstractions.Messaging;
 using Bookify.Domain.Abstractions;
 using Bookify.Domain.Apartments;
@@ -15,7 +16,7 @@ public sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookin
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly PricingService pricingService;
-
+    private readonly IDateTimeProvider _dateTimeProvider;
     public ReserveBookingCommandHandler(IBookingRepository bookingRepository,
         IApartmentRepository apartmentRepository,
         IUserRepository userRepository,
@@ -29,21 +30,26 @@ public sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookin
 
     public async Task<Result<Guid>> Handle(ReserveBookingCommand request, CancellationToken cancellationToken)
     {
-        User? user = await _userRepository.GetByIdAsync(request.UserId);
+        User? user = await _userRepository.GetByIdAsync(request.UserId , cancellationToken);
 
         if (user is null)
             return Result.Failure<Guid>(UserErrors.NotFound);
 
-        Apartment? apartment = await _apartmentRepository.GetByIdAsync(request.ApartmentId);
+        Apartment? apartment = await _apartmentRepository.GetByIdAsync(request.ApartmentId , cancellationToken);
         if (apartment is null)
             return Result.Failure<Guid>(ApartmentErrors.NotFound);
 
         DateRange duration = DateRange.Create(request.StartDate, request.EndDate);
+
+        if (await _bookingRepository.IsOverlappingAsync(apartment, duration, cancellationToken))
+        {
+            return Result.Failure<Guid>(BookingErrors.Overlap);
+        }
         
         Booking? booking = Booking.Reserve(apartment ,
             user.Id ,
             duration,
-            DateTime.UtcNow,
+            _dateTimeProvider.UtcNow,
             pricingService);
 
         await _bookingRepository.Add(booking);
