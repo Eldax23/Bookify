@@ -52,7 +52,7 @@ public sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookin
             _dateTimeProvider.UtcNow,
             pricingService);
 
-        await _bookingRepository.Add(booking);
+        _bookingRepository.Add(booking);
         await _unitOfWork.SaveChangesAsync();
 
         return booking.Id;
