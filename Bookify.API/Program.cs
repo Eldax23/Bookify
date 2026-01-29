@@ -1,3 +1,6 @@
+using Bookify.Application;
+using Bookify.Infrastructure;
+
 namespace Bookify.API;
 
 public class Program
@@ -7,7 +10,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
+        builder.Services.AddApplicationService();
+        builder.Services.AddInfrastrucutreService(builder.Configuration);
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
