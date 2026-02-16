@@ -53,6 +53,11 @@ public sealed class Booking : Entity
         
     }
 
+    private Booking()
+    {
+        
+    }
+
     public Result Confirm(DateTime utcNow)
     {
         // if the date is not reserved then that would be a problem (GIVEN THE HIERARCHY ABOVE)

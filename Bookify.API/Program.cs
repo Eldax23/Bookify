@@ -1,3 +1,4 @@
+using Bookify.API.Extensions;
 using Bookify.Application;
 using Bookify.Infrastructure;
 
@@ -23,6 +24,7 @@ public class Program
         {
             app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json" , "v1"));
             app.MapOpenApi();
+            app.SeedData();
         }
 
         app.UseHttpsRedirection();
