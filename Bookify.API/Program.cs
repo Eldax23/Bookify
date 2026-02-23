@@ -24,14 +24,14 @@ public class Program
         {
             app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json" , "v1"));
             app.MapOpenApi();
-            app.SeedData();
+            // app.SeedData();
         }
 
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
 
-
+        app.UseCustomExceptionHandler();
         app.MapControllers();
 
         app.Run();
