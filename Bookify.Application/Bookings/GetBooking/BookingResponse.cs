@@ -2,20 +2,46 @@ namespace Bookify.Application.Bookings.GetBooking;
 
 public class BookingResponse
 {
-    public Guid Id { get; private set; }
-    public Guid ApartmentId { get; private set; }
-    public Guid UserId { get; private set; }
-    public decimal PriceAmount { get; private set; }
-    public string PriceCurrency { get; private set; }
-    public decimal CleaningFeeAmount { get; private set; }
-    public string CleaningFeeCurrency { get; private set; }
-    public decimal AmentiesUpCharge { get; private set; }
-    public string AmentiesUpChargeCurrency { get; private set; }
-    public decimal TotalPriceAmount { get; private set; }
-    public string TotalPriceCurrency { get; private set; }
-    public int Status { get; private set; }
-    public DateOnly DurationStart { get; private set; }
-    public DateOnly DurationEnd { get; private set; }
-    public DateTime CreatedOnUtc { get; private set; }
-    
+    public Guid Id { get;  set; }
+    public Guid ApartmentId { get;  set; }
+    public Guid UserId { get;  set; }
+    public decimal PriceAmount { get;  set; }
+    public string PriceCurrency { get;  set; }
+    public decimal CleaningFeeAmount { get;  set; }
+    public string CleaningFeeCurrency { get;  set; }
+    public decimal AmentiesUpCharge { get;  set; }
+    public string AmentiesUpChargeCurrency { get;  set; }
+    public decimal TotalPriceAmount { get;  set; }
+    public string TotalPriceCurrency { get;  set; }
+    public int Status { get;  set; }
+    public DateOnly DurationStart { get;  set; }
+    public DateOnly DurationEnd { get;  set; }
+    public DateTime CreatedOnUtc { get;  set; }
+
+    private BookingResponse()
+    {
+        
+    }
+
+    public BookingResponse(Guid id , Guid apartmentId , Guid userId , 
+        decimal priceAmount, string priceCurrency, decimal cleaningFeeAmount, string cleaningFeeCurrency,
+        decimal amentiesUpCharge, string amentiesUpChargeCurrency,
+        decimal totalPriceAmount, string totalPriceCurrency
+        , DateOnly durationStart, DateOnly durationEnd, DateTime createdOnUtc)
+    {
+        Id = id;
+        ApartmentId = apartmentId;
+        UserId = userId;
+        PriceAmount = priceAmount;
+        PriceCurrency = priceCurrency;
+        CleaningFeeAmount = cleaningFeeAmount;
+        CleaningFeeCurrency = cleaningFeeCurrency;
+        AmentiesUpCharge = amentiesUpCharge;
+        AmentiesUpChargeCurrency = amentiesUpChargeCurrency;
+        TotalPriceAmount = totalPriceAmount;
+        TotalPriceCurrency = totalPriceCurrency;
+        DurationStart = durationStart;
+        DurationEnd = durationEnd;
+        CreatedOnUtc = createdOnUtc;
+    }
 }

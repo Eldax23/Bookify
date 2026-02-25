@@ -16,17 +16,21 @@ public sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookin
     private readonly IApartmentRepository _apartmentRepository;
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly PricingService pricingService;
+    private readonly PricingService _pricingService;
     private readonly IDateTimeProvider _dateTimeProvider;
     public ReserveBookingCommandHandler(IBookingRepository bookingRepository,
         IApartmentRepository apartmentRepository,
         IUserRepository userRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork ,
+        PricingService pricingService,
+        IDateTimeProvider dateTimeProvider)
     {
         _bookingRepository = bookingRepository;
         _apartmentRepository = apartmentRepository;
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
+        _pricingService = pricingService;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<Result<Guid>> Handle(ReserveBookingCommand request, CancellationToken cancellationToken)
@@ -53,7 +57,7 @@ public sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookin
                 user.Id,
                 duration,
                 _dateTimeProvider.UtcNow,
-                pricingService);
+                _pricingService);
 
             _bookingRepository.Add(booking);
             await _unitOfWork.SaveChangesAsync();

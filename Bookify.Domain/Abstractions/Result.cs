@@ -4,12 +4,12 @@ public class Result
 {
     protected internal Result(bool isSuccess, Error error)
     {
-        if (isSuccess && Error != Error.None)
+        if (isSuccess && error != Error.None)
         {
             throw new InvalidOperationException();
         }
 
-        if (!isSuccess && Error == Error.None)
+        if (!isSuccess && error == Error.None)
         {
             throw new InvalidOperationException();
         }

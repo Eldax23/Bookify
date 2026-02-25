@@ -12,7 +12,7 @@ namespace Bookify.Domain.Bookings;
 
 public sealed class Booking : Entity
 {
-    public Booking(Guid id, Guid userId, Money priceForPeriod, Money cleaningFee, Money amentiesFee,
+    public Booking(Guid id, Guid apartmentId , Guid userId, Money priceForPeriod, Money cleaningFee, Money amentiesFee,
         Money totalPrice, BookingStatus status, DateRange duration, DateTime createdOnUtc ) : base(id)
     {
         UserId = userId;
@@ -23,6 +23,7 @@ public sealed class Booking : Entity
         Status = status;
         Duration = duration;
         CreatedOnUtc = createdOnUtc;
+        ApartmentId = apartmentId;
     }
 
     public Guid ApartmentId { get; private set; }
@@ -43,9 +44,9 @@ public sealed class Booking : Entity
         PricingService pricingService)
     {
         PricingDetails pricingDetails = pricingService.CalculatePrice(apartment, duration);
-        Booking booking = new Booking(Guid.NewGuid(), userId, pricingDetails.priceForPeriod, pricingDetails.cleaningFee,
+        Booking booking = new Booking(Guid.NewGuid(), apartment.Id , userId, pricingDetails.priceForPeriod, pricingDetails.cleaningFee,
             pricingDetails.amentiesCharge, pricingDetails.totalPrice, BookingStatus.Reserved, duration, utcNow);
-        
+
         
         booking.RaiseDomainEvent(new BookingReservedDomainEvent(booking.Id));
         apartment.LastBookedOnUtc = utcNow;

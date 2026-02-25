@@ -1,6 +1,7 @@
 using Bookify.Domain.Apartments;
 using Bookify.Domain.Bookings;
 using Bookify.Domain.Shared.Records;
+using Bookify.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -47,7 +48,7 @@ public class BookConfiguration : IEntityTypeConfiguration<Booking>
             .HasForeignKey(b => b.ApartmentId);
         
         // User -> Booking (One-To-Many)
-        builder.HasOne<Booking>()
+        builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(b => b.UserId);
     }

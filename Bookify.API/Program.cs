@@ -31,7 +31,7 @@ public class Program
 
         app.UseAuthorization();
 
-        app.UseCustomExceptionHandler();
+        // app.UseCustomExceptionHandler();
         app.MapControllers();
 
         app.Run();

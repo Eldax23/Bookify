@@ -1,3 +1,4 @@
+using Bookify.Domain.Apartments.Enums;
 using Bookify.Domain.Apartments.Records;
 
 namespace Bookify.Application.Apartments.SearchApartments;
@@ -10,4 +11,5 @@ public class ApartmentResponse
     public decimal Price { get; set; }
     public string Currency { get; set; }
     public AddressResponse Address { get; set; }
+    public List<Amenity> Amenities { get; set; }
 }

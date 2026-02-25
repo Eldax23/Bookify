@@ -20,6 +20,6 @@ internal abstract  class Repository<T>
 
     public void Add(T entity)
     {
-        _dbContext.Add(entity);
+        _dbContext.Set<T>().Add(entity);
     }
 }

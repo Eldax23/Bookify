@@ -13,6 +13,15 @@ public class BookingReservedDomainEventHandler : INotificationHandler<BookingRes
     private readonly IUserRepository _userRepository;
     private readonly IBookingRepository _bookingRepository;
     private readonly IEmailService _emailService;
+
+    public BookingReservedDomainEventHandler(IUserRepository userRepository,
+        IBookingRepository bookingRepository,
+        IEmailService emailService)
+    {
+        _userRepository = userRepository;
+        _bookingRepository = bookingRepository;
+        _emailService = emailService;
+    }
     public async Task Handle(BookingReservedDomainEvent notification, CancellationToken cancellationToken)
     {
         Booking? booking = await _bookingRepository.GetByIdAsync(notification.BookingId , cancellationToken);

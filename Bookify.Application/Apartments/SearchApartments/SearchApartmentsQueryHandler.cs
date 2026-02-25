@@ -17,6 +17,11 @@ public class SearchApartmentsQueryHandler : IQueryHandler<SearchApartmentsQuery 
         (int)BookingStatus.Cancelled,
     };
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
+
+    public SearchApartmentsQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+    {
+        _sqlConnectionFactory = sqlConnectionFactory;
+    }
     public async Task<Result<IReadOnlyList<ApartmentResponse>>> Handle(SearchApartmentsQuery request, CancellationToken cancellationToken)
     {
         if (request.StartDate > request.EndDate)
@@ -26,7 +31,20 @@ public class SearchApartmentsQueryHandler : IQueryHandler<SearchApartmentsQuery 
 
 
         const string sql = """
-                           SELECT * FROM apartments as a
+                           SELECT id AS ID ,
+                           name AS Name,
+                           description AS Description,
+                           price_amount AS Price,
+                           price_currency AS Currency,
+                           cleaning_fee_amount AS CleaningFeeAmount,
+                           cleaning_fee_currency AS CleaningFeeCurrency,
+                           last_booked_on_utc AS LastBookedOnUtc,
+                           address_country AS Country,
+                           address_state AS State,
+                           address_zip_code AS ZipCode,
+                           address_city AS City,
+                           address_street AS Street
+                           FROM "Apartments" as a
                            WHERE NOT EXISTS(
                                SELECT 1 FROM bookings AS b
                                WHERE
