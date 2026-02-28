@@ -16,7 +16,8 @@ public sealed class User : Entity
     public FirstName FirstName { get; private set; }
     public LastName LastName { get; private set; }
     public Email Email { get; private set; }
-
+    
+    public string IdentityId { get; private set; }
     
     // factory method
     public static User Create(FirstName firstName, LastName lastName, Email email)
@@ -24,5 +25,10 @@ public sealed class User : Entity
         User entity = new User(Guid.NewGuid() , firstName, lastName, email);
         entity.RaiseDomainEvent(new UserCreatedDomainEvent(entity.Id));
         return entity;
+    }
+
+    public void SetIdentityId(string IdentityId)
+    {
+        IdentityId = IdentityId;
     }
 }
