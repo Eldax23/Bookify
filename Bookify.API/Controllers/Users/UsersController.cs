@@ -25,12 +25,13 @@ public class UsersController : ControllerBase
     {
         RegisterUserCommand command = new RegisterUserCommand(request.Email , request.FirstName , request.LastName , request.Password);
         Result<Guid> result = await _sender.Send(command, cancellationToken);
-
+        
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
         
         return Ok(result.Value);
+
     }
 }
