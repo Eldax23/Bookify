@@ -23,15 +23,15 @@ public class UsersController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterUserRequest request, CancellationToken cancellationToken)
     {
-        RegisterUserCommand command = new RegisterUserCommand(request.Email , request.FirstName , request.LastName , request.Password);
+        RegisterUserCommand command = new RegisterUserCommand(request.Email, request.FirstName, request.LastName,
+            request.Password, request.Username);
         Result<Guid> result = await _sender.Send(command, cancellationToken);
-        
+
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
-        
-        return Ok(result.Value);
 
+        return Ok(result.Value);
     }
 }

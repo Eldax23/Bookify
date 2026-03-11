@@ -1,3 +1,3 @@
 namespace Bookify.API.Controllers.Users;
 
-public record RegisterUserRequest(string Email , string FirstName , string LastName , string Password);
+public record RegisterUserRequest(string Email , string FirstName , string LastName , string Password, string Username);

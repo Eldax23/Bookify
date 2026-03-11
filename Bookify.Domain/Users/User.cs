@@ -29,6 +29,6 @@ public sealed class User : Entity
 
     public void SetIdentityId(string IdentityId)
     {
-        IdentityId = IdentityId;
+        this.IdentityId = IdentityId;
     }
 }

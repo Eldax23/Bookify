@@ -6,4 +6,5 @@ public record RegisterUserCommand(
     string Email,
     string FirstName,
     string LastName,
+    string UserName,
     string Password) : ICommand<Guid>;

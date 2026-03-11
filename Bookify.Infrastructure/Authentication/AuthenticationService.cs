@@ -14,11 +14,11 @@ public class AuthenticationService : IAuthenticationService
         _httpClient = httpClient;
     }
 
-    public async Task<string> RegisterAsync(User user, string password, CancellationToken cancellationToken = default)
+    public async Task<string> RegisterAsync(User user, string Username ,  string password, CancellationToken cancellationToken = default)
     {
         UserRepresentationModel userRepresentationModel = UserRepresentationModel.FromUser(user);
 
-        userRepresentationModel.Credentials = new[]
+        userRepresentationModel.credentials = new[]
         {
             new CredentialsRepresentationModel()
             {
@@ -27,6 +27,8 @@ public class AuthenticationService : IAuthenticationService
                 Temporary = false
             }
         };
+
+        userRepresentationModel.Username = Username;
 
         HttpResponseMessage response =
             await _httpClient.PostAsJsonAsync("users", userRepresentationModel, cancellationToken);

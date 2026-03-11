@@ -27,7 +27,12 @@ public class AdminAuthorizationDelegatingHandler : DelegatingHandler
         
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
         
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            string error = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Keycloak error: {response.StatusCode} - {error}");
+        }
+        
         return response;
     }
 
@@ -44,9 +49,12 @@ public class AdminAuthorizationDelegatingHandler : DelegatingHandler
         FormUrlEncodedContent authorizationRequestContent = new FormUrlEncodedContent(authorizationParamaters);
 
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,
-            new Uri(_keycloakOptions.Value.TokenUrl));
+            new Uri(_keycloakOptions.Value.TokenUrl))
+        {
+            Content = authorizationRequestContent
+        };
 
-        
+
         // GO FETCH THAT TOKEN!!
         HttpResponseMessage authorizationResponse = await base.SendAsync(request, cancellationToken);
         authorizationResponse.EnsureSuccessStatusCode();

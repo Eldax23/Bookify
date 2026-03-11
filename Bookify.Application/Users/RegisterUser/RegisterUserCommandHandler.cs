@@ -26,7 +26,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, G
             new LastName(request.LastName),
             new Email(request.Email));
 
-        string identityId = await _authenticationService.RegisterAsync(user , request.Password, cancellationToken);
+        string identityId = await _authenticationService.RegisterAsync(user , request.UserName , request.Password, cancellationToken);
         user.SetIdentityId(identityId);
 
         _userRepository.Add(user);
