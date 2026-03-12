@@ -1,9 +1,12 @@
+using Bookify.Application.Users.LoginUser;
 using Bookify.Application.Users.RegisterUser;
 using Bookify.Domain.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Bookify.API.Controllers.Users;
 
@@ -24,7 +27,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Register(RegisterUserRequest request, CancellationToken cancellationToken)
     {
         RegisterUserCommand command = new RegisterUserCommand(request.Email, request.FirstName, request.LastName,
-            request.Password, request.Username);
+            request.Username, request.Password);
         Result<Guid> result = await _sender.Send(command, cancellationToken);
 
         if (result.IsFailure)
@@ -32,6 +35,20 @@ public class UsersController : ControllerBase
             return BadRequest(result.Error);
         }
 
+        return Ok(result.Value);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginUserRequest request, CancellationToken cancellationToken)
+    {
+        LoginUserCommand command = new(request.Username, request.Password);
+
+        Result<AccessToken> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        
         return Ok(result.Value);
     }
 }

@@ -19,5 +19,6 @@ public class UserRepresentationModel
             LastName = user.LastName.Value,
             Email = user.Email.Value,
             EmailVerified = true,
+            Enabled = true,
         };
 }

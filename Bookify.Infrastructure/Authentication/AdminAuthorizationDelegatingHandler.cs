@@ -26,12 +26,14 @@ public class AdminAuthorizationDelegatingHandler : DelegatingHandler
             JwtBearerDefaults.AuthenticationScheme, authorizationToken.AccessToken);
         
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-        
+
         if (!response.IsSuccessStatusCode)
         {
             string error = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Keycloak error: {response.StatusCode} - {error}");
+            throw new Exception($"keycloak error: {error}");
         }
+
+        // response.EnsureSuccessStatusCode();
         
         return response;
     }
