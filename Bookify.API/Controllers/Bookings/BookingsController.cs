@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.JavaScript;
+using Bookify.Application.Bookings.GetAllBookings;
 using Bookify.Application.Bookings.GetBooking;
 using Bookify.Application.Bookings.ReserveBooking;
 using Bookify.Domain.Abstractions;
@@ -23,6 +24,14 @@ public class BookingsController : ControllerBase
     {
         GetBookingQuery query = new GetBookingQuery(id);
         Result<BookingResponse> result = await _sender.Send(query, cancellationToken);
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllBookings(CancellationToken cancellationToken)
+    {
+        GetAllQuery query = new GetAllQuery();
+        Result<List<BookingResponse>> result = await _sender.Send(query, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 

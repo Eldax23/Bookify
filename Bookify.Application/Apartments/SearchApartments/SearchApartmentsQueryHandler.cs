@@ -17,7 +17,6 @@ public class SearchApartmentsQueryHandler : IQueryHandler<SearchApartmentsQuery 
         (int)BookingStatus.Cancelled,
     };
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
     public SearchApartmentsQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
     {
         _sqlConnectionFactory = sqlConnectionFactory;
