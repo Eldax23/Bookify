@@ -109,3 +109,67 @@ yarn-error.log*
 *.swp
 *.tmp
 *.cache
+=======
+# Build outputs
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]ogs/
+*.log
+TestResults/
+coverage/
+
+# Rider / JetBrains / ReSharper
+.idea/
+*.ipr
+*.iws
+_ReSharper*/
+_ReSharper.Caches/
+*.DotSettings.user
+
+# Visual Studio / VS Code (if present)
+.vs/
+*.suo
+*.user
+*.userprefs
+*.csproj.user
+*.dbmdl
+*.cache/
+*.ndjson
+
+# NuGet / Paket
+packages/
+*.nupkg
+.nuget/
+paket-files/
+
+# Temporary and lock files
+*.tmp
+*.temp
+*.swp
+*.lock
+*.bak
+
+# Generated files
+*.generated.cs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# env
+.env
+.containers/
+
+# Docker Compose overrides (local dev settings)
+compose.override.yaml
+docker-compose.override.yml
+
+
+# Optional: local configuration (keep `appsettings.json` tracked)
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+>>>>>>> e28d52a ((fix): editing .gitignore)
