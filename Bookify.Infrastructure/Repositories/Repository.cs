@@ -22,4 +22,10 @@ internal abstract  class Repository<T>
     {
         _dbContext.Set<T>().Add(entity);
     }
+
+
+    public void Delete(T entity)
+    {
+        _dbContext.Set<T>().Remove(entity);
+    }
 }

@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices.JavaScript;
 using Bookify.Application.Bookings.GetAllBookings;
 using Bookify.Application.Bookings.GetBooking;
+using Bookify.Application.Bookings.RescheduleBookingCommand;
 using Bookify.Application.Bookings.ReserveBooking;
 using Bookify.Domain.Abstractions;
 using MediatR;
@@ -47,5 +48,20 @@ public class BookingsController : ControllerBase
         }
         
         return CreatedAtAction(nameof(GetBooking) , new {id = result.Value} ,  result.Value);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> RescheduleBooking(RescheduleBookingRequest request, CancellationToken cancellationToken)
+    {
+        RescheduleBookingCommand command = new RescheduleBookingCommand(request.BookingId, request.ApartmentId,
+            request.StartDate, request.EndDate);
+
+        Result<bool> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        
+        return Ok("Booking Updated.");
     }
 }

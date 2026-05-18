@@ -27,7 +27,6 @@ internal sealed class BookingRepository : Repository<Booking> , IBookingReposito
 
 
 
-
     public async Task<bool> IsOverlappingAsync(Apartment apartment, DateRange duration, CancellationToken cancellationToken)
     {
         return await _dbContext.Set<Booking>()
