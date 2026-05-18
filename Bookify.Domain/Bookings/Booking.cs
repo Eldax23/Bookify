@@ -54,6 +54,17 @@ public sealed class Booking : Entity
         
     }
 
+
+    public void Reschedule(Apartment apartment , DateOnly startDate , DateOnly endDate , PricingService pricingService)
+    {
+
+        Duration.Start = startDate;
+        Duration.End = endDate;
+        PricingDetails newPrice = pricingService.CalculatePrice(apartment , DateRange.Create(startDate ,  endDate));
+        PriceForPeriod = newPrice.priceForPeriod;
+    }
+    
+
     private Booking()
     {
         
